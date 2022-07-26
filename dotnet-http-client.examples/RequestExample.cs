@@ -14,6 +14,7 @@ namespace dotnet_http_client.examples {
 		public async Task HitEndpoint() {
 			var result = await subject.MakeApiRequest("https://www.google.com");
 
+			Assert.NotNull(result);
 			Assert.True(result.IsSuccessCode());
 		}
 	}

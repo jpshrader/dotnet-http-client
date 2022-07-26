@@ -15,19 +15,19 @@ namespace dotnet_api_client.Common {
 
 		public HttpStatusCode StatusCode { get; private set; }
 
-		public IDictionary<string, IEnumerable<string>> Headers { get; private set; }
+		public IDictionary<string, IEnumerable<string>> Headers { get; private set; } = new Dictionary<string, IEnumerable<string>>();
 
-		public IEnumerable<Cookie> Cookies { get; private set; }
+		public IEnumerable<Cookie> Cookies { get; private set; } = Enumerable.Empty<Cookie>();
 
-		public string Body { get; private set; }
+		public string Body { get; private set; } = string.Empty;
 
-		public T ToObject<T>() {
+		public T? ToObject<T>() {
 			var contentType = Headers.SingleOrDefault(h => h.Key.ToLower() == "content-type");
 			if (contentType.Value.FirstOrDefault() == ContentTypeExtensions.XmlContentType) {
 				var serialiser = new XmlSerializer(typeof(T));
 				using var reader = new StringReader(Body);
 
-				return (T)serialiser.Deserialize(reader);
+				return (T?)serialiser.Deserialize(reader);
 			}
 
 			return JsonConvert.DeserializeObject<T>(Body);
