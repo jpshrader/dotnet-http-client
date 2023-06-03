@@ -3,9 +3,42 @@ using System.Net;
 using System.Text;
 
 namespace dotnet_http_client.Client {
-
 	public class ApiClient : IApiClient {
 		private static readonly IEnumerable<(string key, string value)> emptyParams = Enumerable.Empty<(string key, string value)>();
+
+		public Task<ApiResponse> Get(
+			string requestUrl, 
+			ContentType contentType = ContentType.Json, 
+			IEnumerable<(string key, string value)>? queryParams = null, 
+			IEnumerable<(string key, string value)>? headers = null) {
+			return MakeApiRequest(requestUrl, RequestMethod.Get, contentType, null, queryParams, headers);
+		}
+
+		public Task<ApiResponse> Put(
+			string requestUrl, 
+			ContentType contentType = ContentType.Json, 
+			object? body = null, 
+			IEnumerable<(string key, string value)>? queryParams = null, 
+			IEnumerable<(string key, string value)>?  headers = null) {
+			return MakeApiRequest(requestUrl, RequestMethod.Put, contentType, body, queryParams, headers);
+		}
+
+		public Task<ApiResponse> Post(
+			string requestUrl, 
+			ContentType contentType = ContentType.Json, 
+			object? body = null, 
+			IEnumerable<(string key, string value)>? queryParams = null, 
+			IEnumerable<(string key, string value)>? headers = null) {
+			return MakeApiRequest(requestUrl, RequestMethod.Post, contentType, body, queryParams, headers);
+		}
+
+		public Task<ApiResponse> Delete(
+			string requestUrl, 
+			ContentType contentType = ContentType.Json, 
+			IEnumerable<(string key, string value)>? queryParams = null, 
+			IEnumerable<(string key, string value)>? headers = null) {
+			return MakeApiRequest(requestUrl, RequestMethod.Delete, contentType, null, queryParams, headers);
+		}
 
 		public async Task<ApiResponse> MakeApiRequest(
 			string requestUrl,
